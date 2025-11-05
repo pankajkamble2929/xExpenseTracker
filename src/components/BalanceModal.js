@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 export default function BalanceModal({ onClose, onAdd }) {
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const num = Number(amount);
     if (!num || num <= 0) {
-      alert("Enter a positive amount");
+      alert('Enter a positive amount');
       return;
     }
     onAdd(num);
+    setAmount('');
+    onClose();
   };
 
   return (
@@ -33,7 +35,7 @@ export default function BalanceModal({ onClose, onAdd }) {
               type="button"
               className="btn cancel"
               onClick={() => {
-                setAmount("");
+                setAmount('');
                 onClose();
               }}
             >

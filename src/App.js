@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import BalanceModal from "./components/BalanceModal";
-import ExpenseModal from "./components/ExpenseModal";
-import ExpenseList from "./components/ExpenseList";
-import Summary from "./components/Summary";
-import "./App.css";
+import React, { useEffect, useState } from 'react';
+import BalanceModal from './components/BalanceModal';
+import ExpenseModal from './components/ExpenseModal';
+import ExpenseList from './components/ExpenseList';
+import Summary from './components/Summary';
+import './App.css';
 
 function App() {
   const [balance, setBalance] = useState(() => {
-    const stored = localStorage.getItem("balance");
+    const stored = localStorage.getItem('balance');
     return stored ? Number(stored) : 5000;
   });
 
   const [expenses, setExpenses] = useState(() => {
-    const stored = localStorage.getItem("expenses");
+    const stored = localStorage.getItem('expenses');
     return stored ? JSON.parse(stored) : [];
   });
 
@@ -22,11 +22,11 @@ function App() {
 
   // persist to localStorage
   useEffect(() => {
-    localStorage.setItem("expenses", JSON.stringify(expenses));
+    localStorage.setItem('expenses', JSON.stringify(expenses));
   }, [expenses]);
 
   useEffect(() => {
-    localStorage.setItem("balance", String(balance));
+    localStorage.setItem('balance', String(balance));
   }, [balance]);
 
   // compute total expenses (sum of prices)
@@ -41,16 +41,21 @@ function App() {
   // Add a new expense
   const handleAddExpense = (expense) => {
     const amt = Number(expense.price);
-    if (!expense.title || !expense.price || !expense.category || !expense.date) {
-      alert("Please fill all expense fields");
+    if (
+      !expense.title ||
+      !expense.price ||
+      !expense.category ||
+      !expense.date
+    ) {
+      alert('Please fill all expense fields');
       return false;
     }
     if (amt <= 0 || isNaN(amt)) {
-      alert("Enter valid positive amount");
+      alert('Enter valid positive amount');
       return false;
     }
     if (amt > balance) {
-      alert("Insufficient balance!");
+      alert('Insufficient balance!');
       return false;
     }
 
@@ -94,7 +99,7 @@ function App() {
     // If increasing expense amount, check balance
     const diff = newPrice - oldPrice;
     if (diff > 0 && diff > balance) {
-      alert("Insufficient balance to increase expense amount");
+      alert('Insufficient balance to increase expense amount');
       return false;
     }
 
@@ -102,7 +107,9 @@ function App() {
     setBalance((b) => Number(b) - diff);
 
     // Replace expense in list
-    setExpenses((prev) => prev.map((e) => (e.id === updatedExpense.id ? updatedExpense : e)));
+    setExpenses((prev) =>
+      prev.map((e) => (e.id === updatedExpense.id ? updatedExpense : e))
+    );
 
     return true;
   };
@@ -114,8 +121,10 @@ function App() {
 
   const categories = [...new Set(expenses.map((e) => e.category))];
   // include some default categories for UX
-  const defaultCategories = ["Food", "Entertainment", "Travel", "Other"];
-  const allCategories = Array.from(new Set([...defaultCategories, ...categories]));
+  const defaultCategories = ['Food', 'Entertainment', 'Travel', 'Other'];
+  const allCategories = Array.from(
+    new Set([...defaultCategories, ...categories])
+  );
 
   return (
     <div className="app-wrapper">
@@ -127,8 +136,12 @@ function App() {
         <section className="top-panel">
           <div className="wallet-card">
             <h2>Wallet Balance:</h2>
-            <div className="balance-amount">₹{Number(balance).toLocaleString()}</div>
-            <button type="button" className="btn income" onClick={() => setShowBalanceModal(true)}>
+            <div className="balance-amount">{Number(balance)}</div>
+            <button
+              type="button"
+              className="btn income"
+              onClick={() => setShowBalanceModal(true)}
+            >
               + Add Income
             </button>
           </div>
@@ -175,7 +188,12 @@ function App() {
                       <div
                         className="cat-bar-fill"
                         style={{
-                          width: `${Math.min(100, allCategories.length ? (sum / (totalExpenses || 1)) * 100 : 0)}%`,
+                          width: `${Math.min(
+                            100,
+                            allCategories.length
+                              ? (sum / (totalExpenses || 1)) * 100
+                              : 0
+                          )}%`,
                         }}
                       />
                     </div>
